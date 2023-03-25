@@ -1,13 +1,15 @@
-
+#pragma once
+#ifndef _HEADERS_H_
+#define _HEADERS_H_
 /* В этом файле записаны первые объявления классов. */
 
 namespace NL // пространство имен NeuronLogic
 {
     namespace Functions // пространство имен функций с производной
     {
-        // класс абстрактной основы функции с производной
-        template<typename T>
-        class FunctionBase;
+        // класс абстрактной заготовки функции
+        class Function;
+
     }
 
     namespace Neurons // пространство имен нейронов
@@ -16,11 +18,6 @@ namespace NL // пространство имен NeuronLogic
         template<typename ValueType>
         class NeuronBase;
     }
-
-    namespace NeuronSources // пространство имен источников информации для нейрона
-    {
-        // класс абстрактной основы источника информации для нейрона
-        template<typename NeuronValueType>
-        class NeuronSourceBase;
-    }
 }
+
+#endif
