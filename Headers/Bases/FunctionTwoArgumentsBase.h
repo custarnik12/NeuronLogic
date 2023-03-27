@@ -16,6 +16,7 @@ namespace NL // пространство имен NeuronLogic
             class FunctionTwoArgumentsBase : public Function
             {
             public:
+                FunctionTwoArgumentsBase(const std::string& name) : NL::Functions::Function(name) {}
                 // значение функции от аргумента и параметра
                 virtual T func(const T&, const T&) = 0;
                 // значение производной по переменной аргумента от аргумента и параметра

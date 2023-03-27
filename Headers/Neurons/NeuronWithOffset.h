@@ -15,36 +15,29 @@ namespace NL // пространство имен NeuronLogic
         class NeuronWithOffset : public SimpleNeuron<ValueType>
         {
         public:
-            struct Offset
-            {
-                ValueType x = 0;
-                ValueType y = 0;
-                ValueType k = 1;
-            };
-        public:
             // сеттер сдвигов и коэффициента
-            void set_offset(const Offset&);
+            void set_offset(const Info::Offset<ValueType>&);
             // геттер сдвигов и коэффициента
-            Offset get_offset() const;
+            Info::Offset<ValueType> get_offset() const;
             // сеттер значения
             virtual void set_value(const ValueType&) override;
         public:
-            NeuronWithOffset(const ValueType&, const Offset& = Offset{0,0,1}, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
+            NeuronWithOffset(const ValueType&, const Info::Offset<ValueType>& = Offset{0,0,1}, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
             NeuronWithOffset(const ValueType&, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
-            NeuronWithOffset(const Offset& = Offset{0,0,1}, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
+            NeuronWithOffset(const Info::Offset<ValueType>& = default, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
             NeuronWithOffset(const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>&);
         protected:
-            Offset offset;                        
+            Info::Offset<ValueType> offset;                        
         };
 
         template<typename T>
-        void NeuronWithOffset<T>::set_offset(const Offset& offset)
+        void NeuronWithOffset<T>::set_offset(const Info::Offset<T>& offset)
         {
             this->offset = offset;
         }
 
         template<typename T>
-        NeuronWithOffset<T>::Offset NeuronWithOffset<T>::get_offset() const
+        Info::Offset<T> NeuronWithOffset<T>::get_offset() const
         {
             return offset;
         }
@@ -61,7 +54,7 @@ namespace NL // пространство имен NeuronLogic
         template<typename T>
         NeuronWithOffset<T>::NeuronWithOffset(
             const T& value,
-            const Offset& offset,
+            const Info::Offset<T>& offset,
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :
@@ -78,7 +71,7 @@ namespace NL // пространство имен NeuronLogic
         
         template<typename T>
         NeuronWithOffset<T>::NeuronWithOffset(
-            const Offset& offset,
+            const Info::Offset<T>& offset,
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :

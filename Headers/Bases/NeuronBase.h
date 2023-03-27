@@ -5,6 +5,7 @@
 
 #include <memory>
 
+#include "../Headers.h"
 #include "FunctionSingleArgumentBase.h"
 #include "NeuronInfo.h"
 
@@ -18,9 +19,17 @@ namespace NL // пространство имен NeuronLogic
         class NeuronBase
         {
         public:
-        // заполнить контейнер информацией о нейроне этого класса
-            static void fill_info_class(Info::NeuronInfo&);
-            static const Info::NeuronInfo get_info_class();
+            // заполнить контейнер информацией о нейроне этого класса
+            static void fill_info_class(Info::NeuronInfo<ValueType>& info)
+            {
+                info.name = "NeuronBase<" + std::string(typeid(ValueType).name()) + ">";
+            }
+            static const Info::NeuronInfo<ValueType> get_info_class()
+            {
+                auto result = Info::NeuronInfo<ValueType>();
+                fill_info_class(result);
+                return result;
+            }
         public:
             // геттер по значению
             ValueType get_value() const;
@@ -31,9 +40,22 @@ namespace NL // пространство имен NeuronLogic
             // сеттер по константной ссылке
             virtual void set_value(const ValueType&);
             // заполнить контейнер информацией о нейроне
-            virtual void fill_info(Info::NeuronInfo&);
+            virtual void fill_info(Info::NeuronInfo<ValueType>& info, Info::NeuronRegistrator::NeuronIdList<ValueType>* id_list = nullptr)
+            {
+                {
+                    NeuronBase<ValueType>::fill_info_class(info);
+                    info.value = value;
+                }
+            }
             // получить статичный контейнер с информацией о нейроне
-            const Info::NeuronInfo get_info() const;
+            const Info::NeuronInfo<ValueType> get_info(Info::NeuronRegistrator::NeuronIdList<ValueType>* = nullptr)
+            {
+                Info::NeuronInfo<ValueType> info;
+                fill_info(info);
+                return info;
+            }
+            // обнулить значение
+            void reset_value();
         public:
             // дефолтный конструктор
             NeuronBase() = default;
@@ -45,19 +67,6 @@ namespace NL // пространство имен NeuronLogic
             // значение нейрона
             ValueType value = 0;
         };
-        
-        template<typename T>
-        void NeuronBase<T>::fill_info_class(Info::NeuronInfo& info)
-        {
-
-        }
-
-        template<typename T>
-        const Info::NeuronInfo NeuronBase<T>::get_info_class()
-        {
-            Info::NeuronInfo result;
-            fill_info_class(result);
-        }
 
         template<typename T>
         T NeuronBase<T>::get_value() const
@@ -84,21 +93,15 @@ namespace NL // пространство имен NeuronLogic
         }
 
         template<typename T>
-        void NeuronBase<T>::fill_info(Info::NeuronInfo& info)
-        {
-            fill_info_class(info);
-        }
-
-        template<typename T>
-        const Info::NeuronInfo NeuronBase<T>::get_info() const
-        {
-            return get_info_class();
-        }
-
-        template<typename T>
         NeuronBase<T>::NeuronBase(const T& value)
         :
         value(value) {}
+
+        template<typename T>
+        void NeuronBase<T>::reset_value()
+        {
+            value = 0;
+        }
 
     }
 }
