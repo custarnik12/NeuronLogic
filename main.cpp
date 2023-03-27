@@ -1,15 +1,28 @@
 #include <memory>
 #include <iostream>
-#include "Headers/Functions/SingleArgument/Exp.h"
-#include "Headers/Bases/NeuronInfo.h"
-#include "Functions/SingleArgument/Arctg.h"
 
-int main(int argc, char** argv)
+
+class A
 {
+public:
+    ~A()
+    {
+        std::cout << "A" << std::endl;
+    }
+};
 
-    //NL::Functions::Container::FunctionContainer<NL::Functions::SingleArgument::FunctionSingleArgumentBase<double>> container;
+class B : public A
+{
+public:
+    ~B()
+    {
+        std::cout << "B" << std::endl;
+    }
+};
 
-    //container.register_function(std::make_shared<NL::Functions::SingleArgument::Exp<double>>());
-
+int main()
+{
+    std::shared_ptr<A> lol(new B());
+    lol.reset(new A());
     return 0;
 }

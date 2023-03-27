@@ -15,14 +15,14 @@ namespace NL // пространство имен NeuronLogic
 
             // класс функции умножения аргумента на параметр и ее прозводной (x * t)
             template<typename T>
-            class Multiplication : public FunctionTwoArgumentsBase
+            class Multiplication : public FunctionTwoArgumentsBase<T>
             {
             public:
                 virtual T func(const T& x, const T& t) override
                 {
                     return x * t;
                 }
-                virtual T derivative(conts T& x, const T& t) override
+                virtual T derivative(const T& x, const T& t) override
                 {
                     return t;
                 }

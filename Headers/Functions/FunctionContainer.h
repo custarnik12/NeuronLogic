@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <vector>
+#include <algorithm>
 
 #include "../Headers.h"
 #include "../Bases/Function.h"
@@ -13,7 +14,7 @@ namespace NL // пространство имен NeuronLogic
 {
     namespace Functions // пространство имен функций с производной
     {
-        namespace Container // пространство имен контейнеров функций от 2х аргументов
+        namespace Containers // пространство имен контейнеров функций от 2х аргументов
         {
 
             template<typename FunctionType>
@@ -48,8 +49,8 @@ namespace NL // пространство имен NeuronLogic
                 std::pair<std::string, size_t> res;
                 res.first = func.get()->get_name();
 
-                auto last_func_with_name = std::__find_if(functions.rbegin(), functions.rend(),
-                [&res](const std::shared_ptr<FunctionContainer<FunctionType>>& pointer)->bool{return pointer.get()->get_name() == res.first;});
+                auto last_func_with_name = std::find_if(functions.rbegin(), functions.rend(),
+                [&res](const std::shared_ptr<FunctionType>& pointer)->bool{return pointer.get()->get_name() == res.first;});
 
                 if(last_func_with_name != functions.rend())
                 {
@@ -65,8 +66,8 @@ namespace NL // пространство имен NeuronLogic
             std::weak_ptr<FunctionType> FunctionContainer<FunctionType>::get_function(const std::string& name, const size_t& identifier) const
             {
                 std::weak_ptr<FunctionType> result;
-                auto res = std::__find_if(functions.begin(), functions.end(),
-                [&name, &identifier](const std::shared_ptr<FunctionType> pointer)->bool{
+                auto res = std::find_if(functions.begin(), functions.end(),
+                [&name, &identifier](const std::shared_ptr<FunctionType>& pointer)->bool{
                     return pointer.get()->get_name() == name && pointer.get()->get_identifier() == identifier;
                 });
                 if(res != functions.end())
@@ -85,7 +86,7 @@ namespace NL // пространство имен NeuronLogic
             template<typename FunctionType>
             bool FunctionContainer<FunctionType>::delete_function(const std::string& name, const size_t& identifier)
             {
-                auto res = std::__find_if(functions.begin(), functions.end(),
+                auto res = std::find_if(functions.begin(), functions.end(),
                 [&name, &identifier](const std::shared_ptr<FunctionType>& pointer)->bool{
                     return pointer.get()->get_name() == name && pointer.get()->get_identifier() == identifier;
                 });
@@ -100,7 +101,7 @@ namespace NL // пространство имен NeuronLogic
             template<typename FunctionType>
             bool FunctionContainer<FunctionType>::delete_function(const std::weak_ptr<FunctionType>& pointer_1)
             {
-                auto res = std::__find_if(functions.begin(), functions.end(),
+                auto res = std::find_if(functions.begin(), functions.end(),
                 [&pointer_1](const std::shared_ptr<FunctionType>& pointer_2)->bool{
                     return pointer_1.owner_before(pointer_2);
                 });

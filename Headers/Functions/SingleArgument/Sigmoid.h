@@ -20,7 +20,7 @@ namespace NL // пространство имен NeuronLogic
             class Sigmoid : public FunctionSingleArgumentBase<T>
             {
             public:
-                Sigmoid : FunctionSingleArgumentBase<T>("Sigmoid") {}
+                Sigmoid() : FunctionSingleArgumentBase<T>("Sigmoid") {}
                 virtual T func(const T& x) override
                 {
                     return 1.0 / (1.0 + std::exp(-x));

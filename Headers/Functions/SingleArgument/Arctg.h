@@ -20,7 +20,7 @@ namespace NL // пространство имен NeuronLogic
             class Arctg : public FunctionSingleArgumentBase<T>
             {
             public:
-                Arctg() : name("Arctg") {}
+                Arctg() : FunctionSingleArgumentBase<T>("Arctg") {}
                 virtual T func(const T& x) override
                 {
                     return std::atan(x);

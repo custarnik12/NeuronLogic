@@ -22,12 +22,12 @@ namespace NL // пространство имен NeuronLogic
             // сеттер значения
             virtual void set_value(const ValueType&) override;
         public:
-            NeuronWithOffset(const ValueType&, const Info::Offset<ValueType>& = Offset{0,0,1}, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
+            NeuronWithOffset(const ValueType& = 0, const Info::Offset<ValueType>& = Info::Offset<ValueType>(), const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
             NeuronWithOffset(const ValueType&, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
-            NeuronWithOffset(const Info::Offset<ValueType>& = default, const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
+            NeuronWithOffset(const Info::Offset<ValueType>& = Info::Offset<ValueType>(), const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>& = nullptr);
             NeuronWithOffset(const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<ValueType>>&);
         protected:
-            Info::Offset<ValueType> offset;                        
+            Info::Offset<ValueType> offset;
         };
 
         template<typename T>
@@ -45,7 +45,7 @@ namespace NL // пространство имен NeuronLogic
         template<typename T>
         void NeuronWithOffset<T>::set_value(const T& value)
         {
-            auto func = activator.lock();
+            auto func = SimpleNeuron<T>::activator.lock();
             this->value = offset.y + (func ?
             offset.k * func.get()->func(value + offset.x):
             (value + offset.x) * offset.k);
@@ -58,7 +58,7 @@ namespace NL // пространство имен NeuronLogic
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :
-            SimpleNeuron(value, activator),
+            SimpleNeuron<T>::SimpleNeuron(value, activator),
             offset(offset) {}
 
         template<typename T>
@@ -67,7 +67,7 @@ namespace NL // пространство имен NeuronLogic
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :
-            SimpleNeuron(value, activator) {}
+            SimpleNeuron<T>::SimpleNeuron(value, activator) {}
         
         template<typename T>
         NeuronWithOffset<T>::NeuronWithOffset(
@@ -75,7 +75,7 @@ namespace NL // пространство имен NeuronLogic
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :
-            SimpleNeuron(activator),
+            SimpleNeuron<T>::SimpleNeuron(activator),
             offset(offset) {}
 
         template<typename T>
@@ -83,7 +83,7 @@ namespace NL // пространство имен NeuronLogic
             const std::shared_ptr<NL::Functions::SingleArgument::FunctionSingleArgumentBase<T>>& activator
             )
             :
-            SimpleNeuron(activator) {}
+            SimpleNeuron<T>::SimpleNeuron(activator) {}
 
     }
 }
